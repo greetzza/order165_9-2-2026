@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <link rel="icon" href="gambar/logo.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="gambar/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monokrom with picture</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 900px;
+            padding: 20px;
+            position: relative;
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #222;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards 0.3s;
+        }
+        
+        .instruction {
+            font-weight: 300;
+            margin-bottom: 30px;
+            color: #555;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards 0.5s;
+        }
+        
+        .card-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 8px;
+            object-fit: cover;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0.9);
+            animation: fadeInScale 0.8s ease forwards 0.7s;
+            filter: grayscale(100%);
+            border: 1px solid #ddd;
+        }
+        
+        .card-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-image:active {
+            transform: scale(0.98);
+        }
+        
+        .card-content {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eee;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .photo-frame {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            padding: 10px;
+            background-color: white;
+            border: 15px solid #222;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        
+        .photo-frame:before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 2px solid #555;
+            pointer-events: none;
+        }
+        
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+        }
+        
+        .card-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #222;
+        }
+        
+        .card-content p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #444;
+        }
+        
+        .signature {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            margin-top: 30px;
+            color: #222;
+        }
+        
+        .music-control {
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 1s;
+        }
+        
+        .music-control button {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            color: #555;
+        }
+        
+        .music-control button:hover {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        .gallery {
+            display: none;
+            margin-top: 30px;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 1.5s;
+        }
+        
+        .gallery h3 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 20px;
+            color: #222;
+        }
+        
+        .masonry {
+            columns: 3;
+            column-gap: 15px;
+        }
+        
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 15px;
+        }
+        
+        .masonry-item img {
+            width: 100%;
+            border: 2px solid #222;
+            border-radius: 4px;
+            transition: transform 0.3s ease;
+            filter: grayscale(100%);
+        }
+        
+        .masonry-item img:hover {
+            transform: scale(1.02);
+            filter: grayscale(70%);
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInScale {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #333;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 768px) {
+            .masonry {
+                columns: 2;
+            }
+            
+            .photo-frame {
+                width: 150px;
+                height: 150px;
+                border-width: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .masonry {
+                columns: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Special Greetings</h1>
+        <p class="instruction">Click on the image below to reveal your card</p>
+        <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+             alt="Greeting Card" 
+             class="card-image"
+             id="cardTrigger">
+        <div class="card-content" id="cardContent"> 
+          <h2>For Elis muchlisa </h2>
+            <p>Dengan bertambahnya usai hubungan kita semoga saling memahami satu sama lain, semoga melengkapi satu sama lain, semoga usaha yg sedah dilakukan skrng diberi kelancaran dan kemudahan,AAMIIN</p>
+    
+          <p class="signature">From,<br>Prayogi</p>
+            <div class="music-control">
+                <button id="playBtn">Play Music</button>
+                <button id="pauseBtn">Pause Music</button>
+            </div>
+            <div class="gallery" id="gallery"> 
+                <div class="masonry">
+                    <div class="masonry-item">
+                        <img src="prayogi(1).jpeg" alt="Memory 1">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="prayogi(2).jpeg" alt="Memory 1">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="prayogi(3).jpeg" alt="Memory 1">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="prayogi(4).jpeg" alt="Memory 1">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="prayogi(5).jpeg" alt="Memory 1">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="prayogi(6).jpeg" alt="Memory 1">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="prayogi(7).jpeg" alt="Memory 1">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="prayogi(8).jpeg" alt="Memory 1">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="prayogi(9).jpeg" alt="Memory 1">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="prayogi(10).jpeg" alt="Memory 1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <audio id="bgMusic" loop>
+        <source src="ysto.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <script>
+        const cardTrigger = document.getElementById('cardTrigger');
+        const cardContent = document.getElementById('cardContent');
+        const gallery = document.getElementById('gallery');
+        const bgMusic = document.getElementById('bgMusic');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        
+        // Create confetti elements
+        function createConfetti() {
+            const colors = ['#111', '#333', '#555', '#777', '#999', '#bbb', '#ddd'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                document.body.appendChild(confetti);
+                
+                // Animate confetti
+                setTimeout(() => {
+                    confetti.style.opacity = '1';
+                    confetti.style.transform = `translate(${Math.random() * 100 - 50}px, ${Math.random() * 200 + 100}px) rotate(${Math.random() * 360}deg)`;
+                    confetti.style.transition = `all ${Math.random() * 3 + 2}s ease`;
+                    
+                    // Remove confetti after animation
+                    setTimeout(() => {
+                        confetti.style.opacity = '0';
+                        setTimeout(() => {
+                            confetti.remove();
+                        }, 1000);
+                    }, 3000);
+                }, 0);
+            }
+        }
+        
+        cardTrigger.addEventListener('click', function() {
+            // Hide the trigger image
+            this.style.display = 'none';
+            
+            // Show the card content
+            cardContent.style.display = 'block';
+            
+            // Show the gallery
+            gallery.style.display = 'block';
+            
+            // Change background color
+            document.body.style.backgroundColor = '#eee';
+            
+            // Create confetti effect
+            createConfetti();
+            
+            // Play music
+            bgMusic.play();
+        });
+        
+        playBtn.addEventListener('click', function() {
+            bgMusic.play();
+        });
+        
+        pauseBtn.addEventListener('click', function() {
+            bgMusic.pause();
+        });
+    </script>
+</body>
+
+</html>
